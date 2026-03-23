@@ -13,7 +13,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, UPLOADS_DIR),
     filename: (req, file, cb) => {
-        const ext = path.extname(file.orinalname);
+        const ext = path.extname(file.originalname);
         cb(null, `aluno_${req.params.id}_${Date.now()}${ext}`);
     },
 });

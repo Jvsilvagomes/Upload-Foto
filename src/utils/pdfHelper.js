@@ -1,13 +1,12 @@
 import htmlPdf from 'html-pdf-node';
 import fs from 'fs';
 
-
 export async function gerarPdfAluno(aluno) {
-    let fotoHtml = 'foto indisponível';
+    let fotoHtml = '-';
 
     if (aluno.foto) {
         const base64 = fs.readFileSync(aluno.foto).toString('base64');
-        fotoHtml = `<img src="data:image/jpeg;base64,${base64}" width="120"/>`;
+        fotoHtml = <img src="data:image/jpeg;base64,${base64}" width="120" />;
     }
 
     const html = `
@@ -26,33 +25,33 @@ export async function gerarPdfAluno(aluno) {
     return htmlPdf.generatePdf({ content: html }, { format: 'A4' });
 }
 
-export async function gerarPdfTodos(alunos) {
-    const linhas = alunos.map(
-        (a) => `
-        <tr>
-            <td>${a.nome}</td>
-            <td>${a.escola || '-'}</td>
-            <td>${a.turma || '-'}</td>
-            <td>${a.nome || '-'}</td>
-        </tr>`
-    )
+export async function gerarPdfTodos(alunoRoutes) {
+    const linhas = alunos
+        .map(
+            (a) => `
+            <tr>
+                <td>${a.nome}</td>
+                <td>${a.escola || '-'}</td>
+                <td>${a.turma || '-'}</td>
+                <td>${a.foto || '-'}</td>
+                </tr>`,
+        )
+
         .join('');
 
     const html = `
-    <h1 style="text-align: center;">Relatório de Alunos</h1>
+    <h1 style="text-align: center;"> Relatório de Alunos </h1>
 
-    <table borde="1" cellspacing="0"cellspacing="8">
+    <table border="1" cellspaing="0" cellspacing="8">
         <tr>
-            <th>Nome</th>
-            <th>Escola</th>
-            <th>Turma</th>
-            <th>Foto</th>
+            <th> Nome </th>
+            <th> Escola </th>
+            <th> Turma </th>
+            <th> Foto </th>
         </tr>
         ${linhas}
-
     </table>
-    <p>Total: ${alunos.length} alunos</p>`;
+    <p> Total: ${alunos.length} alunos</p>`;
 
     return htmlPdf.generatePdf({ content: html }, { format: 'A4' });
-
 }
